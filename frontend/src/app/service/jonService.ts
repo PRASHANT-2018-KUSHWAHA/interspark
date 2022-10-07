@@ -59,15 +59,20 @@ export class JobService {
  
   }
 
-  getUserById(id: number, force = false) {
+  getUserById(id: number, force: boolean = false) {
     // get user from reducer if exist otherwise from api
     const jon$ = this.store.select(state => getUserById(state, id));
+    console.log(jon$);
     jon$.pipe(take(1)).subscribe(res => {
+      console.log(res);
       if (force || !res) {
+        console.log(force);
         return this.apiService.getJobById(id).subscribe(data => {
+          // return data;
           this.store.dispatch(new JobAddAction({data}));
         });
       }
+      console.log(res);
       return res;
     });
     return jon$;
