@@ -1,5 +1,5 @@
 export class Job {
-  "id": string;
+  "id": any;
   "job_number": string;
   "job_title": string;
   "job_start_date": null;

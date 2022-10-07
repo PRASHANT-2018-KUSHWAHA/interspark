@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { disable } from '@rxweb/reactive-form-validators';
 import { min } from 'rxjs';
 import { ApiService } from 'src/app/service/api.service';
+import { JobService } from 'src/app/service/jonService';
 
 @Component({
   selector: 'app-new-jobs',
@@ -23,7 +24,11 @@ export class NewJobsComponent {
   //   job_notes: ''
   // }
   myForm: any;
-  constructor(private apiService: ApiService, private router: Router, private fb: FormBuilder) {
+  constructor(private apiService: ApiService,
+    private router: Router,
+    private fb: FormBuilder,
+    private jobService: JobService
+    ) {
     this.myForm = this.fb.group({
       id: Math.random(),
       job_number: ['', [Validators.required]],
@@ -46,16 +51,19 @@ export class NewJobsComponent {
 
 
   onSubmit() {
-    this.apiService.newJob(this.myForm.value).subscribe(data => {
-      console.log(data);
-      this.router.navigateByUrl('/');
-    })      
+    this.jobService.addUser(this.myForm.value);
+    // this.apiService.newJob(this.myForm.value).subscribe(data => {
+    //   console.log(data);
+    //   this.router.navigateByUrl('/');
+    // })      
   }
 
   update() {
-    this.apiService.updateJob(this.myForm.get('id').value,this.myForm.value).subscribe(data => {
-      this.router.navigateByUrl('/');
-    })      
+    const updatedUser = {...this.jobDetail, ...this.myForm.value};
+    this.jobService.updateUser(updatedUser);
+    // this.apiService.updateJob(this.myForm.get('id').value,this.myForm.value).subscribe(data => {
+    //   this.router.navigateByUrl('/');
+    // })      
   }
 
 }
